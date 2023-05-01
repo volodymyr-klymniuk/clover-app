@@ -1,0 +1,6 @@
+login docker container as root
+
+su - postgres
+
+sudo -u postgres psql postgres
+enter a instance psql postgres

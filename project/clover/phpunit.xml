@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Application Test Suite">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="prod" />
+        <env name="APP_NAME" value="Clover Test App" />
+        <env name="APP_KEY" value="pPLDmK66WtRV5tgk12" />
+
+        <env name="APP_DEBUG" value="true" />
+        <env name="APP_URL" value="http://localhost" />
+        <env name="APP_TIMEZONE" value="UTC" />
+
+        <env name="LOG_CHANNEL" value="stack" />
+        <env name="LOG_SLACK_WEBHOOK_URL" value="" />
+
+        <env name="DB_CONNECTION" value="pgsql" />
+        <env name="DB_HOST" value="0.0.0.0" />
+        <env name="DB_PORT" value="5432" />
+        <env name="DB_DATABASE" value="cloverdb" />
+        <env name="DB_USERNAME" value="cloveruser" />
+        <env name="DB_PASSWORD" value="cloverpassword" />
+
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+
+        <env name="CACHE_DRIVER" value="file" />
+        <env name="QUEUE_CONNECTION" value="sync" />
+    </php>
+</phpunit>

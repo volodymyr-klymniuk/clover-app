@@ -1,0 +1,299 @@
+openapi: 3.0.3
+info:
+  title: 'Good luck!'
+  description:  |
+    Create the API to share the company's information for the logged users.
+    Please use the Repository-Service pattern in your task.
+  version: "1.0.0"
+  termsOfService: "https://swagger.io/terms/"
+  contact:
+    email: volodymyr.klymniuk@gmail.com
+  license:
+    name: 'MIT'
+    url: 'https://localhost:8080'
+
+externalDocs:
+  description: Inner application documentation
+  url: 'https://github.com/volodymyr-klymniuk/clover-app/docs'
+servers:
+  - description: Clover APP
+    url: 'https://localhost:8080'
+tags:
+  - name: user
+    description: User context
+
+  - name: company
+    description: Company
+    externalDocs:
+      description: ''
+      url: ''
+
+paths:
+  /api/user/register:
+    post:
+      summary: Register new user
+      responses:
+        '400':
+          description: Сa\'nt create user
+
+        '401':
+          description: User already authorized
+
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityId'
+
+      security:
+        - api_key: []
+
+      requestBody:
+          description: Create a new pet in the store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      tags:
+        - user
+
+  /api/user/recover-password:
+    post:
+      summary: 'Request recover password'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '#/components/schemas/RequestRecoverPassword'
+      responses:
+        '404':
+          description: User not found
+
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetEntityToken'
+      tags:
+        - user
+
+    patch:
+      summary: Process recover password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '#/components/schemas/RecoverRequest'
+
+      responses:
+        '404':
+          description: User not found, tbd may be security issue.
+
+        '400':
+          description: Token does not match
+
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetEntityToken'
+      tags:
+        - user
+
+  /api/user/companies:
+      get:
+        summary: List of users companies
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Company'
+          '401':
+              description: Unauthorized
+
+        parameters:
+          - name: limit
+            in: query
+            description: limit of displayed items less then 20
+            required: false
+            schema:
+              type: integer
+              format: int64
+          - name: offset
+            in: query
+            description: skip items count
+            required: false
+            schema:
+              type: integer
+              format: int64
+        tags:
+          - company
+
+      post:
+        summary: Create company
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Company'
+        responses:
+          '201':
+            description: created
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Company'
+
+          '401':
+            description: Unauthorized
+        tags:
+          - company
+
+components:
+  schemas:
+
+    Company:
+      type: object
+      required:
+        - title
+        - phone
+        - description
+      properties:
+        id:
+          type: integer
+          format: int64
+
+        user_id:
+          type: integer
+          format: int64
+
+        title:
+          type: string
+          format: "Company #2"
+
+        phone:
+          type: string
+          format: "555-22-331"
+
+        description:
+          type: string
+          format: "Trololo"
+
+    RecoverRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: "someemail@domain.com"
+
+        activate_token:
+          type: string
+          format: "6y21reV9pj2HCDlJlH21FvgSicwrsLjuBRopifEJY4vmBl6rlyXv88txK2Md8CdV"
+
+    ProcessRequestRecoverPassword:
+      type: object
+      properties:
+        email:
+          type: string
+          format: "someemail@domain.com"
+
+        activate_token:
+          type: string
+          format: "6y21reV9pj2HCDlJlH21FvgSicwrsLjuBRopifEJY4vmBl6rlyXv88txK2Md8CdV"
+
+    RequestRecoverPassword:
+      type: object
+      properties:
+        email:
+          type: string
+          format: "someemail@domain.com"
+
+    ResetEntityToken:
+      type: object
+      properties:
+        reset_token:
+          type: string
+          format: "6y21reV9pj2HCDlJlH21FvgSicwrsLjuBRopifEJY4vmBl6rlyXv88txK2Md8CdV"
+
+    EntityId:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+
+    User:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+        - phone
+        - api_token
+        - reset_password_token
+        - active
+
+      properties:
+        id:
+          type: integer
+          format: int64
+
+        first_name:
+          type: string
+          format: Divan
+
+        last_name:
+          type: string
+          format: Ivanov
+
+        email:
+          type: string
+          format: XXXXXXXXXXXXXXXXXXXXX
+
+        password:
+          type: string
+          format: XXXXXXXXXXXXXXXXXXXXX
+
+        phone:
+          type: string
+          format: XXX-XXX-XXX-XXX-XXX
+
+        created_at:
+          type: string
+          format: date-time
+
+        updated_at:
+          type: string
+          format: date-time
+
+        active:
+          type: boolean
+
+        api_token:
+          type: string
+          format: XXXXXXXXXXXXXXXXXXXXX
+
+        reset_password_token:
+          type: string
+          format: XXXXXXXXXXXXXXXXXXXXX
+
+  securitySchemes:
+    api_key:
+      description: "6y21reV9pj2HCDlJlH21FvgSicwrsLjuBRopifEJY4vmBl6rlyXv88txK2Md8CdV"
+      in: header
+      type: apiKey
+      name: X-API-TOKEN

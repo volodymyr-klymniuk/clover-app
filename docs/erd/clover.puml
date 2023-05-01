@@ -1,0 +1,42 @@
+@startuml
+' hide the spot
+hide circle
+
+entity "User" as user{
+    * id: number <<generated>>
+    *first_name: string
+    *last_name: string
+    *email: string
+    *password: string
+    *phone: string
+    *created_at: datetime
+    *first_name: datetime
+    *updated_at: string
+    +access_token: string
+    +reset_password_token: string
+    +active: bool
+    --
+    getId
+    * **setAccessToken**
+}
+
+entity "UserActivity" as user_activity{
+    * id: number <<generated>>
+    user_id: number
+    action: string
+    created_at: datetime
+    --
+    getId
+}
+
+entity "Company" as company{
+    * id: number <<generated>>
+    * user_id: number
+    title: string
+    phone: string
+    description: string
+}
+
+user |o..o{ user_activity
+user  |o..o{ company
+@enduml

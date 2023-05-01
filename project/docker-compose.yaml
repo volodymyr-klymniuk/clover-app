@@ -1,0 +1,29 @@
+version: '3.9'
+
+networks:
+    backend:
+        driver: bridge
+
+volumes:
+    postgres:
+        driver: local
+
+services:
+    ### POSTGRESQL ############################################
+    postgres:
+      build:
+        context: ./docker/postgres
+        args:
+          - POSTGRES_VERSION=14
+      volumes:
+          - postgres:/var/lib/postgresql/data
+          - ./docker/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+      ports:
+          - "5432:5432"
+      environment:
+          - POSTGRES_DB=cloverdb
+          - POSTGRES_USER=cloveruser
+          - POSTGRES_PASSWORD=cloverpassword
+      networks:
+          - backend
